@@ -91,7 +91,7 @@ namespace Sykehusinnkjop.Function
             {
 
                 var authBody = new Dictionary<string, string>{
-                    {"resource", Environment.GetEnvironmentVariable("auth_Resource_URL")},
+                    {"resource", Environment.GetEnvironmentVariable("resource_URL")},
                     {"client_id",Environment.GetEnvironmentVariable("auth_Client_ID")},
                     {"client_secret",Environment.GetEnvironmentVariable("auth_Client_Secret")},
                     {"grant_type","client_credentials"}

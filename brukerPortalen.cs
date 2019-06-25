@@ -67,17 +67,17 @@ namespace Sykehusinnkjop.BrukerPortalen
             responseUser DirectReport = JsonConvert.DeserializeObject<responseUser>(new StreamReader(req.Body).ReadToEnd());
 
 
-            if (!security.isManager(managerUserID) )
+            if (!security.isManager(managerUserID))
             {
                 log.LogError("the requesting user with userID: " + managerUserID + " cannot be found in groupID: " + props.managerSecurityGroupID);
                 return new UnauthorizedResult();
-            }            
-            if ( !security.isManager(newManagerUserID) )
+            }
+            if (!security.isManager(newManagerUserID))
             {
                 log.LogError("the user thats being assigned to");
                 return new UnauthorizedResult();
-            }            
-            if ( !security.isDirectReport(managerUserID, DirectReport.Id))
+            }
+            if (!security.isDirectReport(managerUserID, DirectReport.Id))
             {
                 log.LogError("");
                 return new UnauthorizedResult();
@@ -90,7 +90,7 @@ namespace Sykehusinnkjop.BrukerPortalen
 
             HttpResponseMessage response = graphController.Client.SendAsync(request).Result;
             if (!response.IsSuccessStatusCode)
-            {   
+            {
                 return new StatusCodeResult(Int32.Parse(response.StatusCode.ToString()));
             }
 
@@ -142,7 +142,7 @@ namespace Sykehusinnkjop.BrukerPortalen
 
             // cant find a way to do this check before every function, any suggestions would be greatly appreaciated.
             string managerUserID = req.Headers["X-MS-CLIENT-PRINCIPAL-ID"];
-            if (security.isManager(managerUserID) != true)
+            if (!security.isManager(managerUserID))
             {
                 return new UnauthorizedResult();
             }
