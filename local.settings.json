@@ -1,0 +1,15 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+        "AzureWebJobsStorage": "",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+        "auth_Resource_URL": "https://graph.microsoft.co",
+        "auth_Client_ID": "CHANGEME",
+        "auth_Client_Secret": "CHANGEME",
+        "auth_Token_Adress": "CHANGEME",
+        "manager_Security_Group_ID": "CHANGEME",
+        "force_change_password_new_users": true,
+        "force_mfa_on_new_users": true,
+        "display_user_properties": "$select=accountEnabled,birthday,city,companyName,country,department,displayName,employeeId,givenName,hireDate,id,jobTitle,mail,mailNickname,mobilePhone,officeLocation,pastProjects,postalCode,state,streetAddress,surname,userPrincipalName"
+    }
+}
