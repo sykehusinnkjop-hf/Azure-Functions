@@ -10,6 +10,7 @@ namespace Sykehusinnkjop.Function
 
     public static class security
     {
+        
 
         public static bool isDirectReport(string managerID, string userID)
         {
@@ -84,7 +85,7 @@ namespace Sykehusinnkjop.Function
         private static DateTime tokenCreatedAt;
 
         //Authenticate.getToken() will return a token to the resource configured in local.settings.json
-        public static string getToken(ILogger log)
+        public static string getToken()
         {
             if (token == null || tokenCreatedAt == null || DateTime.Now.AddMinutes(-59) > tokenCreatedAt)
             {
@@ -117,8 +118,7 @@ namespace Sykehusinnkjop.Function
                     }
                     else
                     {
-                        
-                        throw new ArgumentException((string)body, "json");
+                        throw new ArgumentException(response.Content.ReadAsStringAsync().Result);
                     }
                 }
             }

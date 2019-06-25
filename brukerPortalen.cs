@@ -37,6 +37,7 @@ namespace Sykehusinnkjop.BrukerPortalen
             string managerUserID = req.Headers["X-MS-CLIENT-PRINCIPAL-ID"];
             if (security.isManager(managerUserID) != true)
             {
+                log.LogError("the requesting user with userID: " + managerUserID + " cannot be found in groupID: " + props.managerSecurityGroupID);
                 return new UnauthorizedResult();
             }
 
@@ -47,6 +48,7 @@ namespace Sykehusinnkjop.BrukerPortalen
 
             if (!response.IsSuccessStatusCode)
             {
+                log.LogError("getManagers failed and fetched the error:" + response.Content.ReadAsStringAsync().Result);
                 return new BadRequestObjectResult(response.Content.ReadAsStringAsync().Result);
             }
 
@@ -54,7 +56,6 @@ namespace Sykehusinnkjop.BrukerPortalen
             responseUser[] responseManagers = Managers.Users;
             return new OkObjectResult(responseManagers);
         }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // assignDirectReport takes managerUserID as a URL parameter and the DirectReportUserID as a json parameter.
         [FunctionName("assignDirectReportToManager")]
@@ -66,8 +67,19 @@ namespace Sykehusinnkjop.BrukerPortalen
             responseUser DirectReport = JsonConvert.DeserializeObject<responseUser>(new StreamReader(req.Body).ReadToEnd());
 
 
-            if (!security.isManager(managerUserID) || !security.isManager(newManagerUserID) || !security.isDirectReport(managerUserID, DirectReport.Id))
+            if (!security.isManager(managerUserID) )
             {
+                log.LogError("the requesting user with userID: " + managerUserID + " cannot be found in groupID: " + props.managerSecurityGroupID);
+                return new UnauthorizedResult();
+            }            
+            if ( !security.isManager(newManagerUserID) )
+            {
+                log.LogError("the user thats being assigned to");
+                return new UnauthorizedResult();
+            }            
+            if ( !security.isDirectReport(managerUserID, DirectReport.Id))
+            {
+                log.LogError("");
                 return new UnauthorizedResult();
             }
 
@@ -78,7 +90,7 @@ namespace Sykehusinnkjop.BrukerPortalen
 
             HttpResponseMessage response = graphController.Client.SendAsync(request).Result;
             if (!response.IsSuccessStatusCode)
-            {
+            {   
                 return new StatusCodeResult(Int32.Parse(response.StatusCode.ToString()));
             }
 
@@ -242,9 +254,4 @@ namespace Sykehusinnkjop.BrukerPortalen
             return new OkObjectResult(DirectReport);
         }
     }
-
-
-
-
-
 }
