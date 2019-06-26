@@ -11,6 +11,7 @@ Bruker Kontroll is an app made to sit between your front-end application and the
 * Log in to your Azure Portal And Navigate to the **App Services** screen. Press the **+Add** button in the upper-left corner. 
 
 * Make sure to select the ***Windows*** OS and the ***.Net Core*** runtime.
+
 ![Create a Function](/docs/img/createFunctionApp.PNG)
 
 
