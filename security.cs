@@ -10,7 +10,7 @@ namespace Sykehusinnkjop.Function
 
     public static class security
     {
-        
+
 
         public static bool isDirectReport(string managerID, string userID)
         {
@@ -25,7 +25,6 @@ namespace Sykehusinnkjop.Function
              userID +
              "?$select=id");
 
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Authenticate.getToken());
             var response = graphController.Client.SendAsync(request).Result;
 
             return response.IsSuccessStatusCode;
@@ -42,7 +41,6 @@ namespace Sykehusinnkjop.Function
             Environment.GetEnvironmentVariable("manager_Security_Group_ID") +
             "/members/" + userID);
 
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Authenticate.getToken());
             var response = graphController.Client.SendAsync(request).Result;
 
             return response.IsSuccessStatusCode;
@@ -91,15 +89,16 @@ namespace Sykehusinnkjop.Function
             {
 
                 var authBody = new Dictionary<string, string>{
-                    {"resource", Environment.GetEnvironmentVariable("resource_URL")},
+                    {"resource", "https://graph.microsoft.com"},
                     {"client_id",Environment.GetEnvironmentVariable("auth_Client_ID")},
                     {"client_secret",Environment.GetEnvironmentVariable("auth_Client_Secret")},
                     {"grant_type","client_credentials"}
                 };
+                string tennantID = Environment.GetEnvironmentVariable("tennant_id");
 
                 using (HttpClient client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("auth_Token_Adress"));
+                    client.BaseAddress = new Uri("https://login.microsoftonline.com/" + tennantID + "/oauth2/token");
                     client.Timeout = new TimeSpan(0, 0, 15);
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

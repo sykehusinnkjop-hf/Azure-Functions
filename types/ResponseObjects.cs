@@ -5,7 +5,7 @@ namespace Sykehusinnkjop.Function
 {
 
 
-    // its important that all properties of responseUser is nullable, that way we can filter out values that are given.
+    // All values must be nullable to avoid default values in case a value wasnt specified in case of a blank property in json requests.
     public class responseUser
     {
         [JsonProperty("accountEnabled")]
@@ -36,7 +36,7 @@ namespace Sykehusinnkjop.Function
         public string GivenName { get; set; }
 
         [JsonProperty("hireDate")]
-        public DateTimeOffset? HireDate { get; set; } 
+        public DateTimeOffset? HireDate { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }
@@ -78,7 +78,7 @@ namespace Sykehusinnkjop.Function
         public string UserPrincipalName { get; set; }
 
     }
-        public class OdataUsers
+    public class OdataUsers
     {
         [JsonProperty("@odata.context")]
         public string Odata { get; set; }

@@ -13,10 +13,12 @@ namespace Sykehusinnkjop.Function
         {
             Client = new HttpClient()
             {
-                BaseAddress = new Uri(Environment.GetEnvironmentVariable("resource_URL")),
+                BaseAddress = new Uri("https://graph.microsoft.com"),
                 Timeout = new TimeSpan(0, 0, 15),
             };
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + Authenticate.getToken());
+
         }
     }
 }
