@@ -22,7 +22,7 @@ namespace Sykehusinnkjop.BrukerPortalen
         //in the AAD and that the security group ID is registered in the app settings.
         [FunctionName("getManagers")]
         public static async Task<IActionResult> getManagers(
-            [HttpTrigger(AuthorizationLevel.User, "get", Route = "Managers")] HttpRequest req, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Managers")] HttpRequest req, ILogger log)
         {
             // cant find a way to do this check before every function, any suggestions would be greatly appreaciated.
             string managerUserID = req.Headers["X-MS-CLIENT-PRINCIPAL-ID"];
