@@ -64,7 +64,7 @@ We need to register the application as a client for azure AD, and give it the ri
 4. Generate a secret by going to **Certificates & Secrets > +New client secret**. Write a short description so people in the future will know what the secret is for.
 ![Navigate to deployment center](/docs/img/generateSecret.png)  
 
-    - Make sure to write down the secret. as it will be unavailable in 15 minutes
+    - Make sure to write down the secret, as it will be unavailable in 15 minutes
 
 5. Adding permissions.
     - select **API permissions > +Add a permission**
