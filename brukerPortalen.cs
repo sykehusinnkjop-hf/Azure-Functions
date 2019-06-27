@@ -22,7 +22,7 @@ namespace Sykehusinnkjop.BrukerPortalen
         //in the AAD and that the security group ID is registered in the app settings.
         [FunctionName("getManagers")]
         public static async Task<IActionResult> getManagers(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Managers")] HttpRequest req, ILogger log)
+            [HttpTrigger(AuthorizationLevel.User, "get", Route = "Managers")] HttpRequest req, ILogger log)
         {
             // cant find a way to do this check before every function, any suggestions would be greatly appreaciated.
             string managerUserID = req.Headers["X-MS-CLIENT-PRINCIPAL-ID"];
@@ -51,7 +51,7 @@ namespace Sykehusinnkjop.BrukerPortalen
         // assignDirectReport takes managerUserID as a URL parameter and the DirectReportUserID as a json parameter.
         [FunctionName("assignDirectReportToManager")]
         public static async Task<IActionResult> assignDirectReportToManager(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "Managers/{newManagerUserID}")] HttpRequest req, string newManagerUserID, ILogger log)
+            [HttpTrigger(AuthorizationLevel.User, "put", Route = "Managers/{newManagerUserID}")] HttpRequest req, string newManagerUserID, ILogger log)
         {
             // checking that the requesting manager and that the new manager is registered in the correct security group.
             string managerUserID = req.Headers["X-MS-CLIENT-PRINCIPAL-ID"];
@@ -99,7 +99,7 @@ namespace Sykehusinnkjop.BrukerPortalen
         // Get a list of user that directly reports to the manager doing the request.
         [FunctionName("getDirectReports")]
         public static async Task<IActionResult> getDirectReports(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "DirectReports")] HttpRequest req, ILogger log)
+            [HttpTrigger(AuthorizationLevel.User, "get", Route = "DirectReports")] HttpRequest req, ILogger log)
         {
 
             // cant find a way to do this check before every function, any suggestions would be greatly appreaciated.
@@ -128,7 +128,7 @@ namespace Sykehusinnkjop.BrukerPortalen
         // Get a single user based on ID passed in the URI that directly reports to the manager doing the request.
         [FunctionName("getDirectReport")]
         public static async Task<IActionResult> getDirectReport(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "DirectReports/{DirectReportUserID}")] HttpRequest req, string DirectReportUserID, ILogger log)
+            [HttpTrigger(AuthorizationLevel.User, "get", Route = "DirectReports/{DirectReportUserID}")] HttpRequest req, string DirectReportUserID, ILogger log)
         {
 
             // cant find a way to do this check before every function, any suggestions would be greatly appreaciated.
@@ -155,7 +155,7 @@ namespace Sykehusinnkjop.BrukerPortalen
         // allows a manager to update the information about users that directly reporsts to the manager doing the request.
         [FunctionName("updateDirectReport")]
         public static async Task<IActionResult> updateDirectReport(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "patch", Route = "DirectReports/{directReportUserID}")] HttpRequest req, string directReportUserID, ILogger log)
+            [HttpTrigger(AuthorizationLevel.User, "patch", Route = "DirectReports/{directReportUserID}")] HttpRequest req, string directReportUserID, ILogger log)
         {
 
             // cant find a way to do this check before every function, any suggestions would be greatly appreaciated.
@@ -198,7 +198,7 @@ namespace Sykehusinnkjop.BrukerPortalen
         // accountEnabled, displayName, mailNickname, passwordProfile, userPrincipalName
         [FunctionName("createDirectReport")]
         public static async Task<IActionResult> createDirectReport(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "DirectReports")] HttpRequest req, ILogger log)
+            [HttpTrigger(AuthorizationLevel.User, "post", Route = "DirectReports")] HttpRequest req, ILogger log)
         {
             // cant find a way to do this check before every function, any suggestions would be greatly appreaciated.
             string managerUserID = req.Headers["X-MS-CLIENT-PRINCIPAL-ID"];
@@ -259,7 +259,7 @@ namespace Sykehusinnkjop.BrukerPortalen
 
         [FunctionName("isalive")]
         public static async Task<IActionResult> isalive(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "isalive")] HttpRequest req, ILogger log)
+        [HttpTrigger(AuthorizationLevel.User, "get", Route = "isalive")] HttpRequest req, ILogger log)
         {
             return new OkObjectResult("im alive");
         }
