@@ -259,7 +259,7 @@ namespace Sykehusinnkjop.BrukerPortalen
 
         [FunctionName("isalive")]
         public static async Task<IActionResult> isalive(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "isalive")] HttpRequest req, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "isalive")] HttpRequest req, ILogger log)
         {
             return new OkObjectResult("im alive");
         }
