@@ -264,31 +264,29 @@ namespace Sykehusinnkjop.BrukerPortalen
             return new OkObjectResult("im alive");
         }
     }
-}
 
 
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-//========================================================================================================================================================================================================================================================================================//
-// Enviroment variables
-public static class props
-{
-    public static string managerSecurityGroupID = Environment.GetEnvironmentVariable("security_group_ID");
-    public static string userProperties = "$select=accountEnabled,birthday,city,companyName,country,department,displayName,employeeId,givenName,hireDate,id,jobTitle,mail,mailNickname,mobilePhone,officeLocation,pastProjects,postalCode,state,streetAddress,surname,userPrincipalName";
-    public static bool ForceChangePasswordNextSignIn
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+    //========================================================================================================================================================================================================================================================================================//
+    // Enviroment variables
+    public static class props
     {
-        get
+        public static string managerSecurityGroupID = Environment.GetEnvironmentVariable("security_group_ID");
+        public static string userProperties = "$select=accountEnabled,birthday,city,companyName,country,department,displayName,employeeId,givenName,hireDate,id,jobTitle,mail,mailNickname,mobilePhone,officeLocation,pastProjects,postalCode,state,streetAddress,surname,userPrincipalName";
+        public static bool ForceChangePasswordNextSignIn
         {
-            return bool.TryParse(Environment.GetEnvironmentVariable("force_change_password_new_users"), out bool result) && result;
+            get
+            {
+                return bool.TryParse(Environment.GetEnvironmentVariable("force_change_password_new_users"), out bool result) && result;
+            }
+        }
+
+        public static bool ForceChangePasswordNextSignInWithMfa
+        {
+            get
+            {
+                return bool.TryParse(Environment.GetEnvironmentVariable("force_mfa_on_new_users"), out bool result) && result;
+            }
         }
     }
-
-    public static bool ForceChangePasswordNextSignInWithMfa
-    {
-        get
-        {
-            return bool.TryParse(Environment.GetEnvironmentVariable("force_mfa_on_new_users"), out bool result) && result;
-        }
-    }
-}
 }
