@@ -15,14 +15,6 @@ using System.Text;
 
 namespace Sykehusinnkjop.BrukerPortalen
 {
-    public static class props
-    {
-        public static string managerSecurityGroupID = Environment.GetEnvironmentVariable("manager_Security_Group_ID");
-        public static bool ForceChangePasswordNextSignIn = bool.Parse(Environment.GetEnvironmentVariable("force_change_password_new_users"));
-        public static bool ForceChangePasswordNextSignInWithMfa = bool.Parse(Environment.GetEnvironmentVariable("force_mfa_on_new_users"));
-        public static string userProperties = "$select=" + Environment.GetEnvironmentVariable("display_user_properties");
-    }
-
     public static class Manager
     {
         //==============================================================================================================================//
@@ -54,6 +46,7 @@ namespace Sykehusinnkjop.BrukerPortalen
             responseUser[] responseManagers = Managers.Users;
             return new OkObjectResult(responseManagers);
         }
+
         //==============================================================================================================================//
         // assignDirectReport takes managerUserID as a URL parameter and the DirectReportUserID as a json parameter.
         [FunctionName("assignDirectReportToManager")]
@@ -173,7 +166,15 @@ namespace Sykehusinnkjop.BrukerPortalen
             }
 
             // Deserialize and Serialize the object straight after each other to make sure only valid fields are passed by the caller
-            responseUser DirectReport = JsonConvert.DeserializeObject<responseUser>(new StreamReader(req.Body).ReadToEnd());
+            responseUser DirectReport;
+            try
+            {
+                DirectReport = JsonConvert.DeserializeObject<responseUser>(new StreamReader(req.Body).ReadToEnd());
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(new JObject(new JProperty("error", ex.Message)));
+            }
             string JsonDirectReport = JsonConvert.SerializeObject(DirectReport, Formatting.Indented, new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore
@@ -207,7 +208,15 @@ namespace Sykehusinnkjop.BrukerPortalen
             }
 
 
-            responseUser NewDirectReport = JsonConvert.DeserializeObject<responseUser>(new StreamReader(req.Body).ReadToEnd());
+            responseUser NewDirectReport;
+            try
+            {
+                NewDirectReport = JsonConvert.DeserializeObject<responseUser>(new StreamReader(req.Body).ReadToEnd());
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(new JObject(new JProperty("error", ex.Message)));
+            }
             NewDirectReport.passwordProfile = new PasswordProfile
             {
                 ForceChangePasswordNextSignIn = props.ForceChangePasswordNextSignIn,
@@ -246,6 +255,32 @@ namespace Sykehusinnkjop.BrukerPortalen
             //----------------------------------------------------------------------------------------------------------------------//
 
             return new OkObjectResult(DirectReport);
+        }
+    }
+
+
+
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+    //========================================================================================================================================================================================================================================================================================//
+    // Enviroment variables
+    public static class props
+    {
+        public static string managerSecurityGroupID = Environment.GetEnvironmentVariable("security_group_ID");
+        public static string userProperties = "$select=accountEnabled,birthday,city,companyName,country,department,displayName,employeeId,givenName,hireDate,id,jobTitle,mail,mailNickname,mobilePhone,officeLocation,pastProjects,postalCode,state,streetAddress,surname,userPrincipalName";
+        public static bool ForceChangePasswordNextSignIn
+        {
+            get
+            {
+                return bool.TryParse(Environment.GetEnvironmentVariable("force_change_password_new_users"), out bool result) && result;
+            }
+        }
+
+        public static bool ForceChangePasswordNextSignInWithMfa
+        {
+            get
+            {
+                return bool.TryParse(Environment.GetEnvironmentVariable("force_mfa_on_new_users"), out bool result) && result;
+            }
         }
     }
 }
