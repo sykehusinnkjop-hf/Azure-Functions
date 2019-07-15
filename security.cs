@@ -4,10 +4,26 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
 using Microsoft.Extensions.Logging;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 
 namespace Sykehusinnkjop.Function
 {
 
+
+    public static class token {
+
+        public static string getUserID(string token) {
+            
+
+            var Token = new JwtSecurityToken(token.Split("Bearer ")[1]);
+
+            string currentUserID = Token.Claims.Where(c => c.Type == "oid").Select(prop => prop.Value).Single();
+
+            return currentUserID;
+        }
+    }
+    
     public static class security
     {
 

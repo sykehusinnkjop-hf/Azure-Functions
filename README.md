@@ -121,3 +121,7 @@ We need to register the application as a client for azure AD, and give it the ri
 ![Navigate to deployment center](/docs/img/authenticationConfiguration2.png)
 Select **Ok** when finnished.
 
+4. Step 3 seems to be broken in Azure At the moment, i will finnish the guide once it is fixed. the guides for advanced auth are broken and is being worked on.
+Guide will be completed once this issue is resolved. https://github.com/MicrosoftDocs/azure-docs/issues/34086
+
+5. Some users suggest that it is possible to authenticate using the old v1 Authorization endpoint, this needs to be investigated.
