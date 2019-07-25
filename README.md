@@ -17,7 +17,7 @@ All stages must be completed in order to deploy the function app.
 
 Log in to your Azure Portal And select **App Services > +Add**.
 
-0. Make sure to select the ***Windows*** OS and the ***.Net Core*** runtime.                                                    
+1. Make sure to select the ***Windows*** OS and the ***.Net Core*** runtime.                                                    
 ![Create a Function](/docs/img/createFunctionApp.PNG)
 
 
