@@ -1,4 +1,4 @@
-# Bruker-Kontroll-API (Give me a name)
+# Leder API
 Bruker Kontroll is an app made to sit between your front-end application and the microsoft Graph API. "Bruker kontroll" allows you to request information about users based on your "role" in the organization.
 
 ## intended usage
