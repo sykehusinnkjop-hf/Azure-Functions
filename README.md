@@ -11,45 +11,7 @@ All stages must be completed in order to deploy the function app.
 - AD Authentication
 - Register the a
 
-## How To Deploy
-
-
-
-Log in to your Azure Portal And select **App Services > +Add**.
-
-1. Make sure to select the ***Windows*** OS and the ***.Net Core*** runtime.                                                    
-![Create a Function](/docs/img/createFunctionApp.PNG)
-
-
-
-1. In your function app in the Azure portal, select **Platform features** > **Deployment Center**
-![Navigate to deployment center](/docs/img/navigateDeployment.jpg)
-
-2. In the **Deployment Center**, select **GitHub**, and then select **Authorize**. Or, if you've already authorized GitHub, select **Continue**.
-![Navigate to deployment center](/docs/img/selectGithub.png)
-
-3. In GitHub, Select **Authorize AzureAppService**.
-![Navigate to deployment center](/docs/img/authorize.png)
-In the Azure portal Deployment Center, select Continue.
-
-4. Select **App Service build service** 
-![Navigate to deployment center](/docs/img/build.png)
-
-5.  
-    - organization should be **sykehusinnkjop-hf**. 
-    - repository should be **Bruker-Kontroll-AZ-func**. 
-    - Branch should be **Master** for the production ready release.
-
-![Navigate to deployment center](/docs/img/selectRepository.png)
-
-6. Finally, review all details and select Finish to complete your deployment configuration.
-![Navigate to deployment center](/docs/img/summary.png)             
-You have now deployed the code into the Azure Function enviroment. Next up we need to configure it.
-
-
-
-
-## Register the function with AD
+## Register the Application with AD
 
 We need to Register the application with AAD in order to get access to the MSGraph API
 
@@ -94,6 +56,46 @@ We need to Register the application with AAD in order to get access to the MSGra
 1. Create an **Azure AD security group** or use an existing security group containing your managers. Only users assigned to this group will be allowed to make requests to this API.
 **Take note of the ObjectID for the security group.**
 ![Navigate to deployment center](/docs/img/securityGroup.png) 
+
+
+## Deploy the application
+
+
+
+Log in to your Azure Portal And select **App Services > +Add**.
+
+1. Make sure to select the ***Windows*** OS and the ***.Net Core*** runtime.                                                    
+![Create a Function](/docs/img/createFunctionApp.PNG)
+
+
+
+1. In your function app in the Azure portal, select **Platform features** > **Deployment Center**
+![Navigate to deployment center](/docs/img/navigateDeployment.jpg)
+
+2. In the **Deployment Center**, select **GitHub**, and then select **Authorize**. Or, if you've already authorized GitHub, select **Continue**.
+![Navigate to deployment center](/docs/img/selectGithub.png)
+
+3. In GitHub, Select **Authorize AzureAppService**.
+![Navigate to deployment center](/docs/img/authorize.png)
+In the Azure portal Deployment Center, select Continue.
+
+4. Select **App Service build service** 
+![Navigate to deployment center](/docs/img/build.png)
+
+5.  
+    - organization should be **sykehusinnkjop-hf**. 
+    - repository should be **Bruker-Kontroll-AZ-func**. 
+    - Branch should be **Master** for the production ready release.
+
+![Navigate to deployment center](/docs/img/selectRepository.png)
+
+6. Finally, review all details and select Finish to complete your deployment configuration.
+![Navigate to deployment center](/docs/img/summary.png)             
+You have now deployed the code into the Azure Function enviroment. Next up we need to configure it.
+
+
+
+
 
 
 ## Add enviroment variables
