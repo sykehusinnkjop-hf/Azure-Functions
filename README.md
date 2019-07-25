@@ -49,12 +49,12 @@ You have now deployed the code into the Azure Function enviroment. Next up we ne
 
 ## Register the function with AD
 
-We need to register the application as a client for azure AD, and give it the right permissions for
+We need to Register the application with AAD in order to get access to the MSGraph API
 
 1. Select **Azure Active Directory > App Registrations > +New registrations**
 ![Navigate to deployment center](/docs/img/registerApplication.png)                                                                                             
 
-2. Register a name that is easily identifiable, then select **Accounts in this organizational directory only**. No need for a Redirect URL since the app is using "client credential" authentication.
+2. Use a name that will identify the function, then select **Accounts in this organizational directory only**. No need for a Redirect URL since the app uses "client credential" authentication.
 ![Navigate to deployment center](/docs/img/registerApplicationName.png)                       
 *users should and will not log in with this registration, it would give them indiidually elivated priviliges to the graph, We will later register a separate service for authentication.*
 
