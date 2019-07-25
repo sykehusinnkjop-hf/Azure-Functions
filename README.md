@@ -55,7 +55,7 @@ We need to Register the application with AAD in order to get access to the MSGra
 ![Navigate to deployment center](/docs/img/registerApplication.png)                                                                                             
 
 2. Use a name that will identify the function, then select **Accounts in this organizational directory only**. No need for a Redirect URL since the app uses "client credential" authentication.
-![Navigate to deployment center](/docs/img/registerApplicationName.png)                       
+![Navigate to deployment center](/docs/img/RegisterApplicationName.png)                       
 *users should and will not log in with this registration, it would give them indiidually elivated priviliges to the graph, We will later register a separate service for authentication.*
 
 3. Take a note of the **tenant ID** and the **Application ID** as these will be used when configuring the application later.                                            
