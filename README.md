@@ -1,5 +1,5 @@
 # Leder-API
-Brukerkontroll is an app made to sit between your front-end application and the microsoft Graph API. "Brukerkontroll" allows you to request information about users based on your "role" in the organization.
+Leder-API is an app made to sit between your front-end application and the microsoft Graph API. "Leder-API" allows you to request information about users based on your "role" in the organization.
 
 ## Intended usage
 The intended usage for Leder API is to move the responsibility of users to employee managers. Today we are using a powerapp with a custom connector on top of the API for the interface. But this could be replaced with a custom SharePoint/Teams Webpart
