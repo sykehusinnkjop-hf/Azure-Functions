@@ -47,7 +47,7 @@ You have now deployed the code into the Azure Function enviroment. Next up we ne
 
 
 
-## Register the function permissions
+## Register the function with AD
 
 We need to register the application as a client for azure AD, and give it the right permissions for
 
@@ -109,19 +109,8 @@ We need to register the application as a client for azure AD, and give it the ri
     Select **Save** once you are finnished
     ![Navigate to deployment center](/docs/img/applicationSettings.png) 
 
-## User Authentication
+## Authentication/Authorization
 
-1. Select **Authentication / Authorization**
-![Navigate to deployment center](/docs/img/selectAuthentication.png) 
+Authentication should be configured through Azure API management. The function **WILL NOT validate token information**, so tokens need to be pre validated before the function is called. 
 
-2. Enable **App Service Authentication** then select **Azure Active Directory**.
-![Navigate to deployment center](/docs/img/authenticationConfiguration.png)
-
-3. Select **Express > Create New AD App** (*Do not use an existing AD app, as this would give users elivated permission, we want plain authentication only*)
-![Navigate to deployment center](/docs/img/authenticationConfiguration2.png)
-Select **Ok** when finnished.
-
-4. Step 3 seems to be broken in Azure At the moment, i will finnish the guide once it is fixed. the guides for advanced auth are broken and is being worked on.
-Guide will be completed once this issue is resolved. https://github.com/MicrosoftDocs/azure-docs/issues/34086
-
-5. Some users suggest that it is possible to authenticate using the old v1 Authorization endpoint, this needs to be investigated.
+The function should be secured via Certificates or Function Secrets to the API Management layer.

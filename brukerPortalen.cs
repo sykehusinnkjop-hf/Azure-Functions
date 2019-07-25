@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 using Sykehusinnkjop.Function;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
-using System.Net.Http.Headers;
 using System.Text;
 
 namespace Sykehusinnkjop.BrukerPortalen
@@ -105,10 +104,6 @@ namespace Sykehusinnkjop.BrukerPortalen
 
 
 
-
-
-
-
     public static class DirectReport
     {
 
@@ -148,12 +143,6 @@ namespace Sykehusinnkjop.BrukerPortalen
 
 
 
-
-
-
-
-
-
         // Get a single user based on ID passed in the URI that directly reports to the manager doing the request.
         [FunctionName("getDirectReport")]
         public static async Task<IActionResult> getDirectReport(
@@ -181,12 +170,6 @@ namespace Sykehusinnkjop.BrukerPortalen
 
 
         //==============================================================================================================================//
-
-
-
-
-
-
 
 
 
