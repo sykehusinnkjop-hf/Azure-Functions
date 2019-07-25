@@ -4,10 +4,26 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
 using Microsoft.Extensions.Logging;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 
 namespace Sykehusinnkjop.Function
 {
 
+
+    public static class token {
+
+        public static string getUserID(string token) {
+            
+
+            var Token = new JwtSecurityToken(token.Split("Bearer ")[1]);
+
+            string currentUserID = Token.Claims.Where(c => c.Type == "oid").Select(prop => prop.Value).Single();
+
+            return currentUserID;
+        }
+    }
+    
     public static class security
     {
 
@@ -38,7 +54,7 @@ namespace Sykehusinnkjop.Function
             }
             var request = new HttpRequestMessage(HttpMethod.Get,
             "https://graph.microsoft.com/v1.0/groups/" +
-            Environment.GetEnvironmentVariable("manager_Security_Group_ID") +
+            Environment.GetEnvironmentVariable("security_group_ID") +
             "/members/" + userID);
 
             var response = graphController.Client.SendAsync(request).Result;
@@ -90,11 +106,11 @@ namespace Sykehusinnkjop.Function
 
                 var authBody = new Dictionary<string, string>{
                     {"resource", "https://graph.microsoft.com"},
-                    {"client_id",Environment.GetEnvironmentVariable("auth_Client_ID")},
-                    {"client_secret",Environment.GetEnvironmentVariable("auth_Client_Secret")},
+                    {"client_id",Environment.GetEnvironmentVariable("application_ID")},
+                    {"client_secret",Environment.GetEnvironmentVariable("application_secret")},
                     {"grant_type","client_credentials"}
                 };
-                string tennantID = Environment.GetEnvironmentVariable("tennant_id");
+                string tennantID = Environment.GetEnvironmentVariable("tenant_ID");
 
                 using (HttpClient client = new HttpClient())
                 {
