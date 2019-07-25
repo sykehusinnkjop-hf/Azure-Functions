@@ -7,9 +7,11 @@ The intended usage for Leder API is to move the responsibility of Users to manag
 
 # Getting Started
 All stages must be completed in order to deploy the function app.
-- How to Deploy
-- AD Authentication
-- Register the a
+- Register the Application with AD
+- Setting up Security group
+- Deploy the application
+- Add enviroment variables
+- Set up Authentication
 
 ## Register the Application with AD
 
@@ -115,6 +117,6 @@ You have now deployed the code into the Azure Function enviroment. Next up we ne
 
 ## Authentication/Authorization
 
-Authentication should be configured through Azure API management. The function **WILL NOT validate token information**, so tokens need to be pre validated before the function is called. 
+Authentication should be configured through Azure API management. The function **Will not validate tokens**, so tokens need to be pre validated before the function is called. 
 
 The function should be secured via Certificates or Function Secrets to the API Management layer.
