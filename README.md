@@ -7,13 +7,13 @@ The intended usage for Leder-API is to delegate responsibility of users to emplo
 
 # Getting Started
 All stages must be completed in order to deploy the function app.
-- Register the Application with AD
+- Register the Application with AAD
 - Setting up Security group
 - Deploy the application
 - Add enviroment variables
 - Set up Authentication
 
-## Register the Application with AD
+## Register the Application with AAD
 
 We need to Register the application with AAD in order to get access to the MSGraph API
 
