@@ -68,14 +68,14 @@ We need to register the application as a client for azure AD, and give it the ri
 
 5. Adding permissions.
     - select **API permissions > +Add a permission**
-    ![Navigate to deployment center](/docs/img/APIPermissions1.png)
+    ![Navigate to deployment center](/docs/img/APIpermissions1.png)
 
     - select **Microsoft Graph**
-    ![Navigate to deployment center](/docs/img/APIPermissions2.png) 
+    ![Navigate to deployment center](/docs/img/APIpermissions2.png) 
 
     - select **Application permissions**
 
-        ![Navigate to deployment center](/docs/img/APIPermissions3.png) 
+        ![Navigate to deployment center](/docs/img/APIpermissions3.png) 
 
     - Add the following permissions:
         - Directory.ReadWrite.All
@@ -84,7 +84,7 @@ We need to register the application as a client for azure AD, and give it the ri
 
 
 6. Get an Administrator to grant consent for the API permissions.
-![Navigate to deployment center](/docs/img/APIPermissions4.png) 
+![Navigate to deployment center](/docs/img/APIpermissions4.png) 
 
 
 ## Setting up Security group
