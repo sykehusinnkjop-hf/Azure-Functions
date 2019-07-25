@@ -1,4 +1,4 @@
-# Leder API
+# Leder-API
 Brukerkontroll is an app made to sit between your front-end application and the microsoft Graph API. "Brukerkontroll" allows you to request information about users based on your "role" in the organization.
 
 ## Intended usage
