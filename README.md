@@ -1,8 +1,8 @@
 # Leder API
-Bruker Kontroll is an app made to sit between your front-end application and the microsoft Graph API. "Bruker kontroll" allows you to request information about users based on your "role" in the organization.
+Brukerkontroll is an app made to sit between your front-end application and the microsoft Graph API. "Brukerkontroll" allows you to request information about users based on your "role" in the organization.
 
-## intended usage
-The intended usage for Leder API is to move the responsibility of Users to managers. Today we are using a powerapp with a custom connector on top of the API for the interface. But this could be replaced with a custom SharePoint/Teams Webpart
+## Intended usage
+The intended usage for Leder API is to move the responsibility of users to employee managers. Today we are using a powerapp with a custom connector on top of the API for the interface. But this could be replaced with a custom SharePoint/Teams Webpart
 
 
 # Getting Started
@@ -86,7 +86,7 @@ In the Azure portal Deployment Center, select Continue.
 
 5.  
     - organization should be **sykehusinnkjop-hf**. 
-    - repository should be **Bruker-Kontroll-AZ-func**. 
+    - repository should be **Brukerkontroll-AZ-func**. 
     - Branch should be **Master** for the production ready release.
 
 ![Navigate to deployment center](/docs/img/selectRepository.png)
