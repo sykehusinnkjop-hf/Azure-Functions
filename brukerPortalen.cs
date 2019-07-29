@@ -18,9 +18,6 @@ namespace Sykehusinnkjop.BrukerPortalen
     {
 
 
-
-
-
         //==============================================================================================================================//
         //Get Managers gets a list of all managers in the organization. this requires that there exists a Security group
         //in the AAD and that the security group ID is registered in the app settings.

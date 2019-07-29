@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
-using Microsoft.Extensions.Logging;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 
@@ -52,10 +51,10 @@ namespace Sykehusinnkjop.Function
             {
                 return false;
             }
-            var request = new HttpRequestMessage(HttpMethod.Get,
-            "https://graph.microsoft.com/v1.0/groups/" +
-            Environment.GetEnvironmentVariable("security_group_ID") +
-            "/members/" + userID);
+            var request = new HttpRequestMessage(HttpMethod.Get, 
+            "https://graph.microsoft.com/v1.0/users/" 
+            + userID + "/memberof/" 
+            + Environment.GetEnvironmentVariable("security_group_ID"));
 
             var response = graphController.Client.SendAsync(request).Result;
 

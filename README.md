@@ -39,13 +39,12 @@ We need to Register the application with AAD in order to get access to the MSGra
     - select **Microsoft Graph**
     ![Navigate to deployment center](/docs/img/APIpermissions2.png) 
 
-    - select **Application permissions**
+    - select **Delegated permissions**
 
         ![Navigate to deployment center](/docs/img/APIpermissions3.png) 
 
     - Add the following permissions:
         - Directory.ReadWrite.All
-        - Group.Read.All 
         - User.ReadWrite.All
 
 
