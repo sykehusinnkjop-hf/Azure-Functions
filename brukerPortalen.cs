@@ -16,11 +16,6 @@ namespace Sykehusinnkjop.BrukerPortalen
 {
     public static class Manager
     {
-
-
-
-
-
         //==============================================================================================================================//
         //Get Managers gets a list of all managers in the organization. this requires that there exists a Security group
         //in the AAD and that the security group ID is registered in the app settings.
@@ -28,16 +23,20 @@ namespace Sykehusinnkjop.BrukerPortalen
         public static async Task<IActionResult> getManagers(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "Managers")] HttpRequest req, ILogger log)
         {
-            // cant find a way to do this check before every function, any suggestions would be greatly appreaciated.
-            string managerUserID = token.getUserID(req.Headers["Authorization"]);
-            if (security.isManager(managerUserID) != true)
+            var token = await Authenticate.getTokenOnBehalf(req.Headers["Authorization"], log);
+            if (!token.isAuthenticated)
             {
-                log.LogError("the requesting user with userID: " + managerUserID + " cannot be found in groupID: " + props.managerSecurityGroupID);
+                return new UnauthorizedResult();
+            }
+
+
+            if (!security.isManager(token.onBehalfToken))
+            {
                 return new UnauthorizedResult();
             }
 
             var request = new HttpRequestMessage(HttpMethod.Get, "/v1.0/groups/" + props.managerSecurityGroupID + "/members" + "?$top=999&" + props.userProperties);
-
+            request.Headers.Add("Authorization", "Bearer " + token.onBehalfToken);
             HttpResponseMessage response = await graphController.Client.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
@@ -54,39 +53,38 @@ namespace Sykehusinnkjop.BrukerPortalen
         //==============================================================================================================================//
 
 
-
-
-
-
-
         // assignDirectReport takes managerUserID as a URL parameter and the DirectReportUserID as a json parameter.
         [FunctionName("assignDirectReportToManager")]
         public static async Task<IActionResult> assignDirectReportToManager(
             [HttpTrigger(AuthorizationLevel.Function, "put", Route = "Managers/{newManagerUserID}")] HttpRequest req, string newManagerUserID, ILogger log)
         {
-            // checking that the requesting manager and that the new manager is registered in the correct security group.
-            string managerUserID = token.getUserID(req.Headers["Authorization"]);
+            var token = await Authenticate.getTokenOnBehalf(req.Headers["Authorization"], log);
+            if (!token.isAuthenticated)
+            {
+                return new UnauthorizedResult();
+            }
+
+
             responseUser DirectReport = JsonConvert.DeserializeObject<responseUser>(new StreamReader(req.Body).ReadToEnd());
 
 
-            if (!security.isManager(managerUserID))
+            if (!security.isManager(token.onBehalfToken))
             {
-                log.LogError("the requesting user with userID: " + managerUserID + " cannot be found in groupID: " + props.managerSecurityGroupID);
                 return new UnauthorizedResult();
             }
-            if (!security.isManager(newManagerUserID))
+            if (!security.isManager(token.onBehalfToken, newManagerUserID))
             {
-                log.LogError("the user thats being assigned to");
                 return new UnauthorizedResult();
             }
-            if (!security.isDirectReport(managerUserID, DirectReport.Id))
+            if (!security.isDirectReport(token.onBehalfToken, DirectReport.Id))
             {
-                log.LogError("");
-                return new UnauthorizedResult();
+                log.LogError("could not find directReport with id " + DirectReport.Id);
+                return new NotFoundObjectResult(new JObject(new JProperty("error", "could not find directReport with id " + DirectReport.Id)));
             }
 
             var requestContent = new JObject(new JProperty("@odata.id", "https://graph.microsoft.com/v1.0/users/" + newManagerUserID));
             var request = new HttpRequestMessage(HttpMethod.Put, "/v1.0/users/" + DirectReport.Id + "/manager/$ref");
+            request.Headers.Add("Authorization", "Bearer " + token.onBehalfToken);
             request.Content = new StringContent(requestContent.ToString(), Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await graphController.Client.SendAsync(request);
@@ -97,18 +95,10 @@ namespace Sykehusinnkjop.BrukerPortalen
 
             return new OkObjectResult(new JObject(new JProperty("id", newManagerUserID)));
         }
-
-
-
     }
-
-
 
     public static class DirectReport
     {
-
-
-
         //==============================================================================================================================//
         // Get a list of user that directly reports to the manager doing the request.
         [FunctionName("getDirectReports")]
@@ -116,15 +106,22 @@ namespace Sykehusinnkjop.BrukerPortalen
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "DirectReports")] HttpRequest req, ILogger log)
         {
 
-            // cant find a way to do this check before every function, any suggestions would be greatly appreaciated.
-            string managerUserID = token.getUserID(req.Headers["Authorization"]);
-            if (security.isManager(managerUserID) != true)
+            var token = await Authenticate.getTokenOnBehalf(req.Headers["Authorization"], log);
+            if (!token.isAuthenticated)
+            {
+                return new UnauthorizedResult();
+            }
+
+            string managerUserID = token.GetUserID();
+
+            if (!security.isManager(token.onBehalfToken))
             {
                 return new UnauthorizedResult();
             }
 
 
             var request = new HttpRequestMessage(HttpMethod.Get, "/v1.0/users/" + managerUserID + "/directReports" + "?$top=999&" + props.userProperties);
+            request.Headers.Add("Authorization", "Bearer " + token.onBehalfToken);
 
             HttpResponseMessage response = await graphController.Client.SendAsync(request);
             if (!response.IsSuccessStatusCode)
@@ -149,19 +146,28 @@ namespace Sykehusinnkjop.BrukerPortalen
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "DirectReports/{DirectReportUserID}")] HttpRequest req, string DirectReportUserID, ILogger log)
         {
 
-            // cant find a way to do this check before every function, any suggestions would be greatly appreaciated.
-            string managerUserID = token.getUserID(req.Headers["Authorization"]);
-            if (!security.isManager(managerUserID))
+            var token = await Authenticate.getTokenOnBehalf(req.Headers["Authorization"], log);
+            if (!token.isAuthenticated)
+            {
+                return new UnauthorizedResult();
+            }
+
+            string managerUserID = token.GetUserID();
+            if (!security.isManager(token.onBehalfToken))
             {
                 return new UnauthorizedResult();
             }
 
             var request = new HttpRequestMessage(HttpMethod.Get, "/v1.0/users/" + managerUserID + "/DirectReports/" + DirectReportUserID);
+            request.Headers.Add("Authorization", "Bearer " + token.onBehalfToken);
 
             HttpResponseMessage response = await graphController.Client.SendAsync(request);
             if (!response.IsSuccessStatusCode)
             {
-                return new BadRequestObjectResult(await response.Content.ReadAsStringAsync());
+                var content = new ContentResult();
+                content.StatusCode = (int)response.StatusCode;
+                content.Content = await response.Content.ReadAsStringAsync();
+                return content;
             }
 
             responseUser directReport = JsonConvert.DeserializeObject<responseUser>(await response.Content.ReadAsStringAsync());
@@ -181,9 +187,13 @@ namespace Sykehusinnkjop.BrukerPortalen
             [HttpTrigger(AuthorizationLevel.Function, "patch", Route = "DirectReports/{directReportUserID}")] HttpRequest req, string directReportUserID, ILogger log)
         {
 
-            // cant find a way to do this check before every function, any suggestions would be greatly appreaciated.
-            string managerUserID = token.getUserID(req.Headers["Authorization"]);
-            if (!security.isManager(managerUserID) || !security.isDirectReport(managerUserID, directReportUserID))
+            var token = await Authenticate.getTokenOnBehalf(req.Headers["Authorization"], log);
+            if (!token.isAuthenticated)
+            {
+                return new UnauthorizedResult();
+            }
+
+            if (!security.isManager(token.onBehalfToken) || !security.isDirectReport(token.onBehalfToken, directReportUserID))
             {
                 return new UnauthorizedResult();
             }
@@ -192,7 +202,10 @@ namespace Sykehusinnkjop.BrukerPortalen
             responseUser DirectReport;
             try
             {
-                DirectReport = JsonConvert.DeserializeObject<responseUser>(new StreamReader(req.Body).ReadToEnd());
+                DirectReport = JsonConvert.DeserializeObject<responseUser>(new StreamReader(req.Body).ReadToEnd(), new JsonSerializerSettings
+                {
+                    MissingMemberHandling = MissingMemberHandling.Error
+                });
             }
             catch (Exception ex)
             {
@@ -204,6 +217,7 @@ namespace Sykehusinnkjop.BrukerPortalen
             });
 
             var request = new HttpRequestMessage(HttpMethod.Patch, "/v1.0/users/" + directReportUserID);
+            request.Headers.Add("Authorization", "Bearer " + token.onBehalfToken);
             request.Content = new StringContent(JsonDirectReport, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await graphController.Client.SendAsync(request);
@@ -221,17 +235,20 @@ namespace Sykehusinnkjop.BrukerPortalen
 
 
 
-
-
         //required fields when creating a user is
         // accountEnabled, displayName, mailNickname, passwordProfile, userPrincipalName
         [FunctionName("createDirectReport")]
         public static async Task<IActionResult> createDirectReport(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "DirectReports")] HttpRequest req, ILogger log)
         {
-            // cant find a way to do this check before every function, any suggestions would be greatly appreaciated.
-            string managerUserID = token.getUserID(req.Headers["Authorization"]);
-            if (security.isManager(managerUserID) != true)
+            var token = await Authenticate.getTokenOnBehalf(req.Headers["Authorization"], log);
+            if (!token.isAuthenticated)
+            {
+                return new UnauthorizedResult();
+            }
+
+            string managerUserID = token.GetUserID();
+            if (!security.isManager(token.onBehalfToken))
             {
                 return new UnauthorizedResult();
             }
@@ -240,7 +257,10 @@ namespace Sykehusinnkjop.BrukerPortalen
             responseUser NewDirectReport;
             try
             {
-                NewDirectReport = JsonConvert.DeserializeObject<responseUser>(new StreamReader(req.Body).ReadToEnd());
+                NewDirectReport = JsonConvert.DeserializeObject<responseUser>(new StreamReader(req.Body).ReadToEnd(), new JsonSerializerSettings
+                {
+                    MissingMemberHandling = MissingMemberHandling.Error
+                });
             }
             catch (Exception ex)
             {
@@ -259,6 +279,7 @@ namespace Sykehusinnkjop.BrukerPortalen
             });
 
             var request = new HttpRequestMessage(HttpMethod.Post, "/v1.0/users/");
+            request.Headers.Add("Authorization", "Bearer " + token.onBehalfToken);
             request.Content = new StringContent(JsonNewDirectReport, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await graphController.Client.SendAsync(request);
@@ -271,9 +292,10 @@ namespace Sykehusinnkjop.BrukerPortalen
             //----------------------------------------------------------------------------------------------------------------------//
             // When a user is created, we also need to bind it to the manager that creates the user.
             responseUser DirectReport = JsonConvert.DeserializeObject<responseUser>(response.Content.ReadAsStringAsync().Result);
-            var requestContent = new JObject(new JProperty("@odata.id", "https://graph.microsoft.com/v1.0/users/" + managerUserID));
+            var requestContent = new JObject(new JProperty("@odata.id", "https://graph.microsoft.com/v1.0/me/"));
 
             request = new HttpRequestMessage(HttpMethod.Put, "/v1.0/users/" + DirectReport.Id + "/manager/$ref");
+            request.Headers.Add("Authorization", "Bearer " + token.onBehalfToken);
             request.Content = new StringContent(requestContent.ToString(), Encoding.UTF8, "application/json");
 
             response = graphController.Client.SendAsync(request).Result;
@@ -284,13 +306,6 @@ namespace Sykehusinnkjop.BrukerPortalen
             //----------------------------------------------------------------------------------------------------------------------//
 
             return new OkObjectResult(DirectReport);
-        }
-
-        [FunctionName("isalive")]
-        public static IActionResult isalive(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "isalive")] HttpRequest req, ILogger log)
-        {
-            return new OkObjectResult("im alive");
         }
     }
 
@@ -307,7 +322,5 @@ namespace Sykehusinnkjop.BrukerPortalen
         public static string userProperties = "$select=accountEnabled,birthday,city,companyName,country,department,displayName,employeeId,givenName,hireDate,id,jobTitle,mail,mailNickname,mobilePhone,officeLocation,pastProjects,postalCode,state,streetAddress,surname,userPrincipalName";
         public static bool ForceChangePasswordNextSignIn = bool.TryParse(Environment.GetEnvironmentVariable("force_change_password_new_users"), out bool result) && result;
         public static bool ForceChangePasswordNextSignInWithMfa = bool.TryParse(Environment.GetEnvironmentVariable("force_mfa_on_new_users"), out bool result) && result;
-
-
     }
 }

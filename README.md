@@ -1,23 +1,71 @@
-# Leder API
-Bruker Kontroll is an app made to sit between your front-end application and the microsoft Graph API. "Bruker kontroll" allows you to request information about users based on your "role" in the organization.
+# Leder-API
+Leder-API is an app made to sit between your front-end application and the microsoft Graph API. Leder-API allows you to request information about users based on your role in the organization.
 
-## intended usage
-The intended usage for Leder API is to move the responsibility of Users to managers. Today we are using a powerapp with a custom connector on top of the API for the interface. But this could be replaced with a custom SharePoint/Teams Webpart
+## Intended usage
+The intended usage for Leder-API is to delegate responsibility of users to employee managers. Today we are using a powerapp with a custom connector on top of the API for the interface. But this could be replaced with a custom SharePoint/Teams Webpart
 
 
 # Getting Started
 All stages must be completed in order to deploy the function app.
-- How to Deploy
-- AD Authentication
-- Register the a
+- Register the Application with AAD
+- Setting up Security group
+- Deploy the application
+- Add enviroment variables
+- Set up Authentication
 
-## How To Deploy
+## Register the Application with AAD
+
+We need to Register the application with AAD in order to get access to the MSGraph API
+
+1. Select **Azure Active Directory > App Registrations > +New registrations**
+![Navigate to deployment center](/docs/img/registerApplication.png)                                                                                             
+
+2. Use a name that will identify the function, then select **Accounts in this organizational directory only**. No need for a Redirect URL since the app uses "client credential" authentication.
+![Navigate to deployment center](/docs/img/RegisterApplicationName.png)                       
+*This Creates an identity the Application can use when calling the Graph*
+
+3. Take a note of the **tenant ID** and the **Application ID** as these will be used when configuring the application later.                                            
+![Navigate to deployment center](/docs/img/registeredIDs.png)  
+
+4. Generate a secret by going to **Certificates & Secrets > +New client secret**. Write a short description so people in the future will know what the secret is for.
+![Navigate to deployment center](/docs/img/generateSecret.png)  
+
+    - Make sure to write down the secret, as it will be unavailable in 15 minutes
+
+5. Adding permissions.
+    - select **API permissions > +Add a permission**
+    ![Navigate to deployment center](/docs/img/APIpermissions1.png)
+
+    - select **Microsoft Graph**
+    ![Navigate to deployment center](/docs/img/APIpermissions2.png) 
+
+    - select **Delegated permissions**
+
+        ![Navigate to deployment center](/docs/img/APIpermissions3.png) 
+
+    - Add the following permissions:
+        - Directory.ReadWrite.All
+        - User.ReadWrite.All
+
+
+6. Get an Administrator to grant consent for the API permissions.
+![Navigate to deployment center](/docs/img/APIpermissions4.png) 
+
+
+## Setting up Security group
+
+1. Create an **Azure AD security group** or use an existing security group containing your managers. Only users assigned to this group will be allowed to make requests to this API.
+**Take note of the ObjectID for the security group.**
+![Navigate to deployment center](/docs/img/securityGroup.png) 
+
+
+## Deploy the application
 
 
 
 Log in to your Azure Portal And select **App Services > +Add**.
 
-0. Make sure to select the ***Windows*** OS and the ***.Net Core*** runtime.                                                    
+1. Make sure to select the ***Windows*** OS and the ***.Net Core*** runtime.                                                    
 ![Create a Function](/docs/img/createFunctionApp.PNG)
 
 
@@ -37,7 +85,7 @@ In the Azure portal Deployment Center, select Continue.
 
 5.  
     - organization should be **sykehusinnkjop-hf**. 
-    - repository should be **Bruker-Kontroll-AZ-func**. 
+    - repository should be **Brukerkontroll-AZ-func**. 
     - Branch should be **Master** for the production ready release.
 
 ![Navigate to deployment center](/docs/img/selectRepository.png)
@@ -49,51 +97,6 @@ You have now deployed the code into the Azure Function enviroment. Next up we ne
 
 
 
-## Register the function with AD
-
-We need to Register the application with AAD in order to get access to the MSGraph API
-
-1. Select **Azure Active Directory > App Registrations > +New registrations**
-![Navigate to deployment center](/docs/img/registerApplication.png)                                                                                             
-
-2. Use a name that will identify the function, then select **Accounts in this organizational directory only**. No need for a Redirect URL since the app uses "client credential" authentication.
-![Navigate to deployment center](/docs/img/RegisterApplicationName.png)                       
-*users should and will not log in with this registration, it would give them indiidually elivated priviliges to the graph, We will later register a separate service for authentication.*
-
-3. Take a note of the **tenant ID** and the **Application ID** as these will be used when configuring the application later.                                            
-![Navigate to deployment center](/docs/img/registeredIDs.png)  
-
-4. Generate a secret by going to **Certificates & Secrets > +New client secret**. Write a short description so people in the future will know what the secret is for.
-![Navigate to deployment center](/docs/img/generateSecret.png)  
-
-    - Make sure to write down the secret, as it will be unavailable in 15 minutes
-
-5. Adding permissions.
-    - select **API permissions > +Add a permission**
-    ![Navigate to deployment center](/docs/img/APIpermissions1.png)
-
-    - select **Microsoft Graph**
-    ![Navigate to deployment center](/docs/img/APIpermissions2.png) 
-
-    - select **Application permissions**
-
-        ![Navigate to deployment center](/docs/img/APIpermissions3.png) 
-
-    - Add the following permissions:
-        - Directory.ReadWrite.All
-        - Group.Read.All 
-        - User.ReadWrite.All
-
-
-6. Get an Administrator to grant consent for the API permissions.
-![Navigate to deployment center](/docs/img/APIpermissions4.png) 
-
-
-## Setting up Security group
-
-1. Create an **Azure AD security group** or use an existing security group containing your managers. Only users assigned to this group will be allowed to make requests to this API.
-**Take note of the ObjectID for the security group.**
-![Navigate to deployment center](/docs/img/securityGroup.png) 
 
 
 ## Add enviroment variables
@@ -113,6 +116,6 @@ We need to Register the application with AAD in order to get access to the MSGra
 
 ## Authentication/Authorization
 
-Authentication should be configured through Azure API management. The function **WILL NOT validate token information**, so tokens need to be pre validated before the function is called. 
+Authentication should be configured through Azure API management. The function **Will not validate tokens**, so tokens need to be pre validated before the function is called. 
 
 The function should be secured via Certificates or Function Secrets to the API Management layer.
