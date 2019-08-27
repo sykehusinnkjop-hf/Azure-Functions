@@ -318,9 +318,16 @@ namespace Sykehusinnkjop.BrukerPortalen
     // Enviroment variables
     public static class props
     {
-        public static string managerSecurityGroupID = Environment.GetEnvironmentVariable("security_group_ID");
-        public static string userProperties = "$select=accountEnabled,birthday,city,companyName,country,department,displayName,employeeId,givenName,hireDate,id,jobTitle,mail,mailNickname,mobilePhone,officeLocation,pastProjects,postalCode,state,streetAddress,surname,userPrincipalName";
-        public static bool ForceChangePasswordNextSignIn = bool.TryParse(Environment.GetEnvironmentVariable("force_change_password_new_users"), out bool result) && result;
-        public static bool ForceChangePasswordNextSignInWithMfa = bool.TryParse(Environment.GetEnvironmentVariable("force_mfa_on_new_users"), out bool result) && result;
+        public static string managerSecurityGroupID;
+        public static string userProperties;
+        public static bool ForceChangePasswordNextSignIn;
+        public static bool ForceChangePasswordNextSignInWithMfa;
+
+        static props() {
+            managerSecurityGroupID = Environment.GetEnvironmentVariable("security_group_ID");
+            userProperties = "$select=accountEnabled,birthday,city,companyName,country,department,displayName,employeeId,givenName,hireDate,id,jobTitle,mail,mailNickname,mobilePhone,officeLocation,pastProjects,postalCode,state,streetAddress,surname,userPrincipalName";
+            ForceChangePasswordNextSignIn = bool.TryParse(Environment.GetEnvironmentVariable("force_change_password_new_users"), out bool result) && result;
+            ForceChangePasswordNextSignInWithMfa = bool.TryParse(Environment.GetEnvironmentVariable("force_mfa_on_new_users"), out bool mfaResult) && mfaResult;
+        }
     }
 }
