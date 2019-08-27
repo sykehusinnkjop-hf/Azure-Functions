@@ -34,7 +34,7 @@ namespace Sykehusinnkjop.Function
         }
 
 
-        //isManager will check if the currently logged in user is registered in the correct security group
+        //isManager will check if the currently logged in user is registered in the configured security group
         public static bool isManager(string onBehalfToken)
         {
             if (onBehalfToken == "" || onBehalfToken == null)
@@ -59,7 +59,7 @@ namespace Sykehusinnkjop.Function
             return response.IsSuccessStatusCode;
         }
 
-        // overloads the isManager method to check if another user is registered in the correct security group
+        // Checks if another user is registered in the configured security group
         public static bool isManager(string onBehalfToken, string userID)
         {
             if (onBehalfToken == "" || onBehalfToken == null)
