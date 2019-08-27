@@ -172,7 +172,7 @@ namespace Sykehusinnkjop.Function
         }
 
 
-
+        // SendOnBehalfRequest will get OnBehalfRequest based from an assertionToken.
         private static async Task<Token> SendOnBehalfRequest(string assertionToken, ILogger log)
         {
             var authBody = new Dictionary<string, string>{
@@ -194,7 +194,7 @@ namespace Sykehusinnkjop.Function
             if (!response.IsSuccessStatusCode)
             {
                 log.LogError(responseBody);
-                return new Token{isAuthenticated = false};
+                return new Token { isAuthenticated = false };
             }
 
 
