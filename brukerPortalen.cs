@@ -21,7 +21,7 @@ namespace Sykehusinnkjop.BrukerPortalen
         //in the AAD and that the security group ID is registered in the app settings.
         [FunctionName("getManagers")]
         public static async Task<IActionResult> getManagers(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "Managers")] HttpRequest req, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Managers")] HttpRequest req, ILogger log)
         {
             var token = await Authenticate.getTokenOnBehalf(req.Headers["Authorization"], log);
             if (!token.isAuthenticated)
@@ -56,7 +56,7 @@ namespace Sykehusinnkjop.BrukerPortalen
         // assignDirectReport takes managerUserID as a URL parameter and the DirectReportUserID as a json parameter.
         [FunctionName("assignDirectReportToManager")]
         public static async Task<IActionResult> assignDirectReportToManager(
-            [HttpTrigger(AuthorizationLevel.Function, "put", Route = "Managers/{newManagerUserID}")] HttpRequest req, string newManagerUserID, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "Managers/{newManagerUserID}")] HttpRequest req, string newManagerUserID, ILogger log)
         {
             var token = await Authenticate.getTokenOnBehalf(req.Headers["Authorization"], log);
             if (!token.isAuthenticated)
@@ -103,7 +103,7 @@ namespace Sykehusinnkjop.BrukerPortalen
         // Get a list of user that directly reports to the manager doing the request.
         [FunctionName("getDirectReports")]
         public static async Task<IActionResult> getDirectReports(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "DirectReports")] HttpRequest req, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "DirectReports")] HttpRequest req, ILogger log)
         {
 
             var token = await Authenticate.getTokenOnBehalf(req.Headers["Authorization"], log);
@@ -143,7 +143,7 @@ namespace Sykehusinnkjop.BrukerPortalen
         // Get a single user based on ID passed in the URI that directly reports to the manager doing the request.
         [FunctionName("getDirectReport")]
         public static async Task<IActionResult> getDirectReport(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "DirectReports/{DirectReportUserID}")] HttpRequest req, string DirectReportUserID, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "DirectReports/{DirectReportUserID}")] HttpRequest req, string DirectReportUserID, ILogger log)
         {
 
             var token = await Authenticate.getTokenOnBehalf(req.Headers["Authorization"], log);
@@ -184,7 +184,7 @@ namespace Sykehusinnkjop.BrukerPortalen
         // allows a manager to update the information about users that directly reporsts to the manager doing the request.
         [FunctionName("updateDirectReport")]
         public static async Task<IActionResult> updateDirectReport(
-            [HttpTrigger(AuthorizationLevel.Function, "patch", Route = "DirectReports/{directReportUserID}")] HttpRequest req, string directReportUserID, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "patch", Route = "DirectReports/{directReportUserID}")] HttpRequest req, string directReportUserID, ILogger log)
         {
 
             var token = await Authenticate.getTokenOnBehalf(req.Headers["Authorization"], log);
@@ -239,7 +239,7 @@ namespace Sykehusinnkjop.BrukerPortalen
         // accountEnabled, displayName, mailNickname, passwordProfile, userPrincipalName
         [FunctionName("createDirectReport")]
         public static async Task<IActionResult> createDirectReport(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "DirectReports")] HttpRequest req, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "DirectReports")] HttpRequest req, ILogger log)
         {
             var token = await Authenticate.getTokenOnBehalf(req.Headers["Authorization"], log);
             if (!token.isAuthenticated)
@@ -323,7 +323,8 @@ namespace Sykehusinnkjop.BrukerPortalen
         public static bool ForceChangePasswordNextSignIn;
         public static bool ForceChangePasswordNextSignInWithMfa;
 
-        static props() {
+        static props()
+        {
             managerSecurityGroupID = Environment.GetEnvironmentVariable("security_group_ID");
             userProperties = "$select=accountEnabled,birthday,city,companyName,country,department,displayName,employeeId,givenName,hireDate,id,jobTitle,mail,mailNickname,mobilePhone,officeLocation,pastProjects,postalCode,state,streetAddress,surname,userPrincipalName";
             ForceChangePasswordNextSignIn = bool.TryParse(Environment.GetEnvironmentVariable("force_change_password_new_users"), out bool result) && result;
