@@ -22,7 +22,7 @@ Registrering av en applikasjon i AAD som har tilgang til og lese/skrive brukerko
 
 
 ## Expose an API
-Må eksponere applikasjonen til en annen registrert applikasjon som blir front end applikasjonen.
+Sett opp et Scope slik at andre applikasjoner kan be om tilgang til Leder-API'et.
 ![Navigate to deployment center](/docs/img/Leder-API-Steg4.png)
 
 
