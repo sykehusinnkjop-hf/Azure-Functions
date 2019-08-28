@@ -1,4 +1,4 @@
-# Frontend App Registration
+# Lederappen App Registration
 
 Registrering av en applikasjon i AAD som har tilgang til og lese/skrive brukerkonto atributter.
 
@@ -23,5 +23,6 @@ Registrering av en applikasjon i AAD som har tilgang til og lese/skrive brukerko
 1. kopier Application ID til lederappen
 ![Navigate to deployment center](/docs/img/Lederappen-Steg4.png)
 
-2. Naviger til **Leder API -> Manifest**, Legg til Lederappen som en *KnownClientApplications*.
+2. Naviger til **Leder API** *applikasjonen som du registrerte tidligere* **-> Manifest**, registrer Lederappen som en *KnownClientApplications*.
+
 ![Navigate to deployment center](/docs/img/Lederappen-Steg5.png)

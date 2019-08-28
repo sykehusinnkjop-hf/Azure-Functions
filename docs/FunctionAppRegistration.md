@@ -1,4 +1,4 @@
-# Function App Registrering
+# Leder-API App Registrering
 
 Registrering av en applikasjon i AAD som har tilgang til og lese/skrive brukerkonto atributter.
 
