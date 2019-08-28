@@ -4,7 +4,7 @@ Registrering av en applikasjon i AAD som har tilgang til og lese/skrive brukerko
 
 * Navn: **Leder-Appen**
 * Supported account types: **Single Tenant**
-![Navigate to deployment center](/docs/img/Lederappen-Steg1.png)
+![Navigate to deployment center](/docs/img/lederappen-Steg1.png)
 
 
 ## Authentication
