@@ -30,7 +30,7 @@ namespace Sykehusinnkjop.BrukerPortalen
             }
 
 
-            if (!security.isManager(token.onBehalfToken))
+            if (!security.isManager(token.onBehalfToken, log))
             {
                 return new UnauthorizedResult();
             }
@@ -68,13 +68,13 @@ namespace Sykehusinnkjop.BrukerPortalen
             responseUser DirectReport = JsonConvert.DeserializeObject<responseUser>(new StreamReader(req.Body).ReadToEnd());
 
 
-            if (!security.isManager(token.onBehalfToken))
+            if (!security.isManager(token.onBehalfToken, log))
             {
                 return new UnauthorizedResult();
             }
-            if (!security.isManager(token.onBehalfToken, newManagerUserID))
+            if (!security.isManager(token.onBehalfToken, newManagerUserID, log))
             {
-                return new UnauthorizedResult();
+                return new NotFoundObjectResult(new JObject(new JProperty("error", "Failed when looking for manager with ID: " + newManagerUserID)));
             }
             if (!security.isDirectReport(token.onBehalfToken, DirectReport.Id))
             {
@@ -90,7 +90,10 @@ namespace Sykehusinnkjop.BrukerPortalen
             HttpResponseMessage response = await graphController.Client.SendAsync(request);
             if (!response.IsSuccessStatusCode)
             {
-                return new StatusCodeResult(Int32.Parse(response.StatusCode.ToString()));
+                var content = new ContentResult();
+                content.StatusCode = (int)response.StatusCode;
+                content.Content = await response.Content.ReadAsStringAsync();
+                return content;
             }
 
             return new OkObjectResult(new JObject(new JProperty("id", newManagerUserID)));
@@ -114,7 +117,7 @@ namespace Sykehusinnkjop.BrukerPortalen
 
             string managerUserID = token.GetUserID();
 
-            if (!security.isManager(token.onBehalfToken))
+            if (!security.isManager(token.onBehalfToken, log))
             {
                 return new UnauthorizedResult();
             }
@@ -153,7 +156,7 @@ namespace Sykehusinnkjop.BrukerPortalen
             }
 
             string managerUserID = token.GetUserID();
-            if (!security.isManager(token.onBehalfToken))
+            if (!security.isManager(token.onBehalfToken, log))
             {
                 return new UnauthorizedResult();
             }
@@ -193,7 +196,7 @@ namespace Sykehusinnkjop.BrukerPortalen
                 return new UnauthorizedResult();
             }
 
-            if (!security.isManager(token.onBehalfToken) || !security.isDirectReport(token.onBehalfToken, directReportUserID))
+            if (!security.isManager(token.onBehalfToken, log) || !security.isDirectReport(token.onBehalfToken, directReportUserID))
             {
                 return new UnauthorizedResult();
             }
@@ -248,7 +251,7 @@ namespace Sykehusinnkjop.BrukerPortalen
             }
 
             string managerUserID = token.GetUserID();
-            if (!security.isManager(token.onBehalfToken))
+            if (!security.isManager(token.onBehalfToken, log))
             {
                 return new UnauthorizedResult();
             }

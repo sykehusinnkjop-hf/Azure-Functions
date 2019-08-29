@@ -35,7 +35,7 @@ namespace Sykehusinnkjop.Function
 
 
         //isManager will check if the currently logged in user is registered in the configured security group
-        public static bool isManager(string onBehalfToken)
+        public static bool isManager(string onBehalfToken, ILogger log)
         {
             if (onBehalfToken == "" || onBehalfToken == null)
             {
@@ -53,14 +53,14 @@ namespace Sykehusinnkjop.Function
             var response = graphController.Client.SendAsync(request).Result;
             if (!response.IsSuccessStatusCode)
             {
-                throw new ArgumentException(response.Content.ReadAsStringAsync().Result);
+                log.LogError(response.Content.ReadAsStringAsync().Result);
             }
 
             return response.IsSuccessStatusCode;
         }
 
         // Checks if another user is registered in the configured security group
-        public static bool isManager(string onBehalfToken, string userID)
+        public static bool isManager(string onBehalfToken, string userID, ILogger log)
         {
             if (onBehalfToken == "" || onBehalfToken == null)
             {
@@ -78,7 +78,7 @@ namespace Sykehusinnkjop.Function
             var response = graphController.Client.SendAsync(request).Result;
             if (!response.IsSuccessStatusCode)
             {
-                throw new ArgumentException(response.Content.ReadAsStringAsync().Result);
+                log.LogError(response.Content.ReadAsStringAsync().Result);
             }
 
             return response.IsSuccessStatusCode;
