@@ -161,7 +161,7 @@ namespace Sykehusinnkjop.BrukerPortalen
                 return new UnauthorizedResult();
             }
 
-            var request = new HttpRequestMessage(HttpMethod.Get, "/v1.0/users/" + managerUserID + "/DirectReports/" + DirectReportUserID);
+            var request = new HttpRequestMessage(HttpMethod.Get, "/v1.0/users/" + managerUserID + "/DirectReports/" + DirectReportUserID + "?" + props.userProperties);
             request.Headers.Add("Authorization", "Bearer " + token.onBehalfToken);
 
             HttpResponseMessage response = await graphController.Client.SendAsync(request);
