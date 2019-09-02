@@ -196,9 +196,14 @@ namespace Sykehusinnkjop.BrukerPortalen
                 return new UnauthorizedResult();
             }
 
-            if (!security.isManager(token.onBehalfToken, log) || !security.isDirectReport(token.onBehalfToken, directReportUserID))
+            if (!security.isManager(token.onBehalfToken, log))
             {
                 return new UnauthorizedResult();
+            }
+
+            if (!security.isDirectReport(token.onBehalfToken, directReportUserID))
+            {
+                return new NotFoundObjectResult(new JObject(new JProperty("error", "The user you are trying to manipulate was not found")));
             }
 
             // Deserialize and Serialize the object straight after each other to make sure only valid fields are passed by the caller
